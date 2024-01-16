@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: test-task-server
+    command: ['npm', 'run', 'start:dev']
+    ports:
+      - '3000:3000'
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - DB_PORT=5432
+      - DB_HOST=db
+    env_file:
+      - .env
+    depends_on:
+      - db
+    volumes:
+      - ./src:/app/src
+
+  db:
+    image: postgres:16.1-alpine3.19
+    container_name: test-task-database
+    volumes:
+      - postgres_db:/data/db
+      - ./db/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
+    ports:
+      - '5432:5432'
+    restart: always
+    env_file:
+      - .env
+
+volumes:
+  postgres_db:
