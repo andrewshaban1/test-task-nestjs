@@ -1,8 +1,8 @@
 # compiled output
 /dist
 /node_modules
-.env
-.migration-ormconfig.ts
+# .env
+# .migration-ormconfig.ts
 
 # Logs
 logs
